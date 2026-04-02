@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>SIGMA SIX | Migrate & Free Mint</title>
+    <title>SIGMA SIX | Migrate & Free Mint & Burn</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -212,7 +212,7 @@
 
         .cards-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
             gap: 30px;
             margin-bottom: 40px;
         }
@@ -479,8 +479,8 @@
     <div class="container">
         <div class="header">
             <div class="logo-area">
-                <h1><i class="fas fa-exchange-alt"></i> SIGMA SIX | MIGRATE</h1>
-                <p>Admin Tools • User Migration & Free Mint</p>
+                <h1><i class="fas fa-exchange-alt"></i> SIGMA SIX | ADMIN TOOLS</h1>
+                <p>User Migration • Free Mint • Burn Tokens</p>
             </div>
             <div style="display: flex; gap: 15px; flex-wrap: wrap;">
                 <button class="back-btn" onclick="window.location.href='index.html'"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
@@ -509,15 +509,62 @@
     </div>
 
     <script>
-        const SIGMA_ADDRESS = "0x846339d474AE98b219111eb969E27b6317aE5852";
+        // ========== UPDATED CONTRACT CONFIGURATION ==========
+        const SIGMA_ADDRESS = "0xaF215838d156F7d348A6d56cA962cbC680A2153F";
         const CREATOR_ADDRESS = "0xDf572e4D93582a9b2EEA65BDb0C588FB5fD4EC4b".toLowerCase();
 
+        // Full ABI from the provided contract
         const SIGMA_ABI = [
-            "function migrateUser(address _u, address _up, uint256 _bal) external",
-            "function creatorFreeMint(address _to, uint256 _amt) external",
-            "function balanceOf(address) view returns (uint256)",
-            "function creator() view returns (address)",
-            "function users(address) view returns (address upline, uint256 directCount, uint256 lastBuyTimestamp, uint256 totalReferralEarned, uint256 lastActionTime, bool hasBoughtBefore)"
+            {"inputs":[{"internalType":"uint256","name":"_amt","type":"uint256"}],"name":"addTreasury","outputs":[],"stateMutability":"nonpayable","type":"function"},
+            {"inputs":[{"internalType":"address","name":"_usdt","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},
+            {"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"newATH","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"ATHUpdate","type":"event"},
+            {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"spender","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Approval","type":"event"},
+            {"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"approve","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},
+            {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"rate","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"usdtSpent","type":"uint256"}],"name":"Buy","type":"event"},
+            {"inputs":[{"internalType":"uint256","name":"_usdtAmount","type":"uint256"},{"internalType":"address","name":"_upline","type":"address"}],"name":"buySigma","outputs":[],"stateMutability":"nonpayable","type":"function"},
+            {"inputs":[{"internalType":"address","name":"_from","type":"address"},{"internalType":"uint256","name":"_amt","type":"uint256"}],"name":"creatorBurn","outputs":[],"stateMutability":"nonpayable","type":"function"},
+            {"inputs":[{"internalType":"address","name":"_to","type":"address"},{"internalType":"uint256","name":"_amt","type":"uint256"}],"name":"creatorFreeMint","outputs":[],"stateMutability":"nonpayable","type":"function"},
+            {"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"subtractedValue","type":"uint256"}],"name":"decreaseAllowance","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},
+            {"inputs":[{"internalType":"uint256","name":"_amt","type":"uint256"}],"name":"emergencyWithdrawTreasury","outputs":[],"stateMutability":"nonpayable","type":"function"},
+            {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"ICO","type":"event"},
+            {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"string","name":"reason","type":"string"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"IncomeLapsed","type":"event"},
+            {"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"addedValue","type":"uint256"}],"name":"increaseAllowance","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},
+            {"inputs":[{"internalType":"address","name":"_u","type":"address"},{"internalType":"address","name":"_up","type":"address"},{"internalType":"uint256","name":"_bal","type":"uint256"}],"name":"migrateUser","outputs":[],"stateMutability":"nonpayable","type":"function"},
+            {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"}],"name":"OwnershipRenounced","type":"event"},
+            {"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"rate","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"RateUpdate","type":"event"},
+            {"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},
+            {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"rate","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"usdtReceived","type":"uint256"}],"name":"Sell","type":"event"},
+            {"inputs":[{"internalType":"uint256","name":"_sigmaAmount","type":"uint256"}],"name":"sellSigma","outputs":[],"stateMutability":"nonpayable","type":"function"},
+            {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"SigmaB","type":"event"},
+            {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"SigmaBonus","type":"event"},
+            {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":true,"internalType":"address","name":"upline","type":"address"},{"indexed":false,"internalType":"uint256","name":"balance","type":"uint256"}],"name":"SigmaM","type":"event"},
+            {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"level","type":"uint256"}],"name":"TeamReferral","type":"event"},
+            {"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transfer","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},
+            {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Transfer","type":"event"},
+            {"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transferFrom","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},
+            {"inputs":[],"name":"ACTIVATION_THRESHOLD","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+            {"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"spender","type":"address"}],"name":"allowance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"allTimeHigh","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+            {"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"BASE_RATE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+            {"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"checkActiveStatus","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"creator","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"decimals","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"getCurrentBuyRate","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+            {"inputs":[{"internalType":"address","name":"_user","type":"address"},{"internalType":"uint256","name":"_level","type":"uint256"}],"name":"isEligibleForLevel","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},
+            {"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"levelRewards","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"MAX_TX_LIMIT","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"name","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"priceAffectingSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"RATE_STEP","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"SELL_COOLDOWN","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"SIGMA_DECIMALS","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"usdt","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"USDT_DECIMALS","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+            {"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"users","outputs":[{"internalType":"address","name":"upline","type":"address"},{"internalType":"uint256","name":"directCount","type":"uint256"},{"internalType":"uint256","name":"lastBuyTimestamp","type":"uint256"},{"internalType":"uint256","name":"totalReferralEarned","type":"uint256"},{"internalType":"uint256","name":"lastActionTime","type":"uint256"},{"internalType":"uint256","name":"lastActionBlock","type":"uint256"},{"internalType":"bool","name":"hasBoughtBefore","type":"bool"}],"stateMutability":"view","type":"function"}
         ];
 
         let provider, signer, userAddress;
@@ -723,6 +770,39 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Burn Sigma Card (NEW) -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2><i class="fas fa-fire"></i> Burn Sigma</h2>
+                            <p>Permanently burn SIGMA tokens from any wallet</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="input-group">
+                                <label><i class="fas fa-user"></i> User Wallet Address</label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-wallet"></i>
+                                    <input type="text" id="burnUserAddr" placeholder="0x..." autocomplete="off">
+                                    <button class="paste-btn" onclick="pasteAddress('burnUserAddr')">Paste</button>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label><i class="fas fa-coins"></i> Sigma Amount to Burn</label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-fire"></i>
+                                    <input type="number" id="burnAmount" placeholder="Amount in SIG6" step="any">
+                                </div>
+                            </div>
+                            <button class="submit-btn" onclick="burnSigma()">
+                                <i class="fas fa-fire"></i> Burn Tokens
+                            </button>
+                            <div id="burnStatus" class="status-msg"></div>
+                            <div class="info-note">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span>⚠️ Only Creator can burn. This will permanently remove tokens from circulation. Use with caution.</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             `;
         }
@@ -835,6 +915,72 @@
                 if (errorMsg.includes("insufficient")) errorMsg = "Insufficient POL for gas";
                 if (errorMsg.includes("Only Creator")) errorMsg = "Only creator can mint tokens";
                 showStatus(statusDiv, 'error', `❌ Mint failed: ${errorMsg.slice(0, 100)}`);
+            }
+        }
+
+        // NEW: Burn Sigma function
+        async function burnSigma() {
+            const userAddr = document.getElementById('burnUserAddr').value.trim();
+            const amountStr = document.getElementById('burnAmount').value.trim();
+            const statusDiv = document.getElementById('burnStatus');
+            
+            if (!userAddr) {
+                showStatus(statusDiv, 'error', 'Please enter user wallet address');
+                return;
+            }
+            
+            if (!ethers.isAddress(userAddr)) {
+                showStatus(statusDiv, 'error', 'Invalid user wallet address');
+                return;
+            }
+            
+            if (!amountStr) {
+                showStatus(statusDiv, 'error', 'Please enter amount to burn');
+                return;
+            }
+            
+            const amount = parseFloat(amountStr);
+            if (isNaN(amount) || amount <= 0) {
+                showStatus(statusDiv, 'error', 'Invalid amount');
+                return;
+            }
+            
+            // Check user balance first
+            try {
+                const balance = await sigmaContract.balanceOf(userAddr);
+                const balanceNum = parseFloat(ethers.formatEther(balance));
+                if (balanceNum < amount) {
+                    showStatus(statusDiv, 'error', `Insufficient balance! User has ${balanceNum.toFixed(4)} SIG6`);
+                    return;
+                }
+            } catch (err) {
+                console.error("Balance check error:", err);
+            }
+            
+            const amountWei = ethers.parseEther(amount.toString());
+            
+            showStatus(statusDiv, 'loading', 'Processing burn...');
+            
+            try {
+                const tx = await sigmaContract.creatorBurn(userAddr, amountWei);
+                showStatus(statusDiv, 'loading', 'Waiting for confirmation...');
+                await tx.wait();
+                showStatus(statusDiv, 'success', `✅ Successfully burned ${amount} SIG6 from ${userAddr.slice(0,8)}...`);
+                
+                document.getElementById('burnUserAddr').value = '';
+                document.getElementById('burnAmount').value = '';
+                
+                setTimeout(() => {
+                    statusDiv.style.display = 'none';
+                }, 5000);
+                
+            } catch (error) {
+                console.error("Burn error:", error);
+                let errorMsg = error.message;
+                if (errorMsg.includes("user rejected")) errorMsg = "Transaction rejected";
+                if (errorMsg.includes("insufficient")) errorMsg = "Insufficient POL for gas";
+                if (errorMsg.includes("Only Creator")) errorMsg = "Only creator can burn tokens";
+                showStatus(statusDiv, 'error', `❌ Burn failed: ${errorMsg.slice(0, 100)}`);
             }
         }
 
