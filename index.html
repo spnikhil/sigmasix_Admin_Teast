@@ -240,6 +240,29 @@
             margin-top: 6px;
         }
 
+        /* Rate info inside stat card */
+        .rate-info {
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+        .rate-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            margin-top: 6px;
+        }
+        .rate-label {
+            color: var(--text-muted);
+        }
+        .rate-value {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        .sell-rate-value {
+            color: var(--warning);
+        }
+
         .actions-section {
             margin-bottom: 40px;
         }
@@ -431,17 +454,63 @@
     </div>
 
     <script>
-        const SIGMA_ADDRESS = "0x846339d474AE98b219111eb969E27b6317aE5852";
+        // ========== UPDATED CONTRACT CONFIGURATION ==========
+        const SIGMA_ADDRESS = "0xaF215838d156F7d348A6d56cA962cbC680A2153F";
         const USDT_ADDRESS = "0xc2132D05D31c914a87C6611C10748AEb04B58e8F";
         const CREATOR_ADDRESS = "0xDf572e4D93582a9b2EEA65BDb0C588FB5fD4EC4b".toLowerCase();
 
+        // Full ABI from the provided contract (updated)
         const SIGMA_ABI = [
-            "function totalSupply() view returns (uint256)",
-            "function balanceOf(address) view returns (uint256)",
-            "function getCurrentBuyRate() view returns (uint256)",
-            "function creator() view returns (address)",
-            "function usdt() view returns (address)",
-            "function users(address) view returns (address upline, uint256 directCount, uint256 lastBuyTimestamp, uint256 totalReferralEarned, uint256 lastActionTime, bool hasBoughtBefore)"
+            {"inputs":[{"internalType":"uint256","name":"_amt","type":"uint256"}],"name":"addTreasury","outputs":[],"stateMutability":"nonpayable","type":"function"},
+            {"inputs":[{"internalType":"address","name":"_usdt","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},
+            {"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"newATH","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"ATHUpdate","type":"event"},
+            {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"spender","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Approval","type":"event"},
+            {"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"approve","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},
+            {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"rate","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"usdtSpent","type":"uint256"}],"name":"Buy","type":"event"},
+            {"inputs":[{"internalType":"uint256","name":"_usdtAmount","type":"uint256"},{"internalType":"address","name":"_upline","type":"address"}],"name":"buySigma","outputs":[],"stateMutability":"nonpayable","type":"function"},
+            {"inputs":[{"internalType":"address","name":"_from","type":"address"},{"internalType":"uint256","name":"_amt","type":"uint256"}],"name":"creatorBurn","outputs":[],"stateMutability":"nonpayable","type":"function"},
+            {"inputs":[{"internalType":"address","name":"_to","type":"address"},{"internalType":"uint256","name":"_amt","type":"uint256"}],"name":"creatorFreeMint","outputs":[],"stateMutability":"nonpayable","type":"function"},
+            {"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"subtractedValue","type":"uint256"}],"name":"decreaseAllowance","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},
+            {"inputs":[{"internalType":"uint256","name":"_amt","type":"uint256"}],"name":"emergencyWithdrawTreasury","outputs":[],"stateMutability":"nonpayable","type":"function"},
+            {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"ICO","type":"event"},
+            {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"string","name":"reason","type":"string"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"IncomeLapsed","type":"event"},
+            {"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"addedValue","type":"uint256"}],"name":"increaseAllowance","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},
+            {"inputs":[{"internalType":"address","name":"_u","type":"address"},{"internalType":"address","name":"_up","type":"address"},{"internalType":"uint256","name":"_bal","type":"uint256"}],"name":"migrateUser","outputs":[],"stateMutability":"nonpayable","type":"function"},
+            {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"}],"name":"OwnershipRenounced","type":"event"},
+            {"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"rate","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"RateUpdate","type":"event"},
+            {"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},
+            {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"rate","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"usdtReceived","type":"uint256"}],"name":"Sell","type":"event"},
+            {"inputs":[{"internalType":"uint256","name":"_sigmaAmount","type":"uint256"}],"name":"sellSigma","outputs":[],"stateMutability":"nonpayable","type":"function"},
+            {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"SigmaB","type":"event"},
+            {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"SigmaBonus","type":"event"},
+            {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":true,"internalType":"address","name":"upline","type":"address"},{"indexed":false,"internalType":"uint256","name":"balance","type":"uint256"}],"name":"SigmaM","type":"event"},
+            {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"level","type":"uint256"}],"name":"TeamReferral","type":"event"},
+            {"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transfer","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},
+            {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Transfer","type":"event"},
+            {"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transferFrom","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},
+            {"inputs":[],"name":"ACTIVATION_THRESHOLD","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+            {"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"spender","type":"address"}],"name":"allowance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"allTimeHigh","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+            {"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"BASE_RATE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+            {"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"checkActiveStatus","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"creator","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"decimals","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"getCurrentBuyRate","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+            {"inputs":[{"internalType":"address","name":"_user","type":"address"},{"internalType":"uint256","name":"_level","type":"uint256"}],"name":"isEligibleForLevel","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},
+            {"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"levelRewards","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"MAX_TX_LIMIT","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"name","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"priceAffectingSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"RATE_STEP","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"SELL_COOLDOWN","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"SIGMA_DECIMALS","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"usdt","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},
+            {"inputs":[],"name":"USDT_DECIMALS","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+            {"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"users","outputs":[{"internalType":"address","name":"upline","type":"address"},{"internalType":"uint256","name":"directCount","type":"uint256"},{"internalType":"uint256","name":"lastBuyTimestamp","type":"uint256"},{"internalType":"uint256","name":"totalReferralEarned","type":"uint256"},{"internalType":"uint256","name":"lastActionTime","type":"uint256"},{"internalType":"uint256","name":"lastActionBlock","type":"uint256"},{"internalType":"bool","name":"hasBoughtBefore","type":"bool"}],"stateMutability":"view","type":"function"}
         ];
 
         const USDT_ABI = [
@@ -458,7 +527,8 @@
         let realStats = {
             totalSupply: 0,
             treasuryBalance: 0,
-            currentRate: 0,
+            currentBuyRate: 0,
+            currentSellRate: 0,
             totalHolders: 0,
             todayBuy: 0,
             todaySell: 0,
@@ -466,6 +536,9 @@
             todayLaps: 0,
             newReferrals: 0
         };
+
+        const BUY_TAX = 0.05;
+        const SELL_TAX = 0.09;
 
         function createParticles() {
             const container = document.getElementById('particles');
@@ -640,16 +713,14 @@
                 const oneDayBlocks = 7200;
                 const fromBlock = Math.max(0, currentBlock - oneDayBlocks);
                 
-                const buyFilter = sigmaContract.filters.TokensBought();
-                const sellFilter = sigmaContract.filters.TokensSold();
+                const buyFilter = sigmaContract.filters.Buy();
+                const sellFilter = sigmaContract.filters.Sell();
                 const lapseFilter = sigmaContract.filters.IncomeLapsed();
-                const referralFilter = sigmaContract.filters.ICOBonusPaid();
                 
-                const [buyEvents, sellEvents, lapseEvents, referralEvents] = await Promise.all([
+                const [buyEvents, sellEvents, lapseEvents] = await Promise.all([
                     sigmaContract.queryFilter(buyFilter, fromBlock, 'latest'),
                     sigmaContract.queryFilter(sellFilter, fromBlock, 'latest'),
-                    sigmaContract.queryFilter(lapseFilter, fromBlock, 'latest'),
-                    sigmaContract.queryFilter(referralFilter, fromBlock, 'latest')
+                    sigmaContract.queryFilter(lapseFilter, fromBlock, 'latest')
                 ]);
                 
                 let totalBuy = 0;
@@ -659,20 +730,19 @@
                 for (const event of buyEvents) {
                     const usdtSpent = Number(ethers.formatUnits(event.args.usdtSpent, 6));
                     totalBuy += usdtSpent;
-                    totalIncome += usdtSpent * 0.05;
+                    totalIncome += usdtSpent * BUY_TAX;
                 }
                 
                 for (const event of sellEvents) {
                     const usdtReceived = Number(ethers.formatUnits(event.args.usdtReceived, 6));
                     totalSell += usdtReceived;
-                    totalIncome += usdtReceived * 0.09;
+                    totalIncome += usdtReceived * SELL_TAX;
                 }
                 
                 realStats.todayBuy = totalBuy;
                 realStats.todaySell = totalSell;
                 realStats.todayIncome = totalIncome;
                 realStats.todayLaps = lapseEvents.length;
-                realStats.newReferrals = referralEvents.length;
                 
             } catch (error) {
                 console.error("Error fetching events:", error);
@@ -690,8 +760,9 @@
                 const treasuryRaw = await usdtContract.balanceOf(SIGMA_ADDRESS);
                 realStats.treasuryBalance = parseFloat(ethers.formatUnits(treasuryRaw, 6));
                 
-                const rateRaw = await sigmaContract.getCurrentBuyRate();
-                realStats.currentRate = parseFloat(ethers.formatUnits(rateRaw, 6));
+                const buyRateRaw = await sigmaContract.getCurrentBuyRate();
+                realStats.currentBuyRate = parseFloat(ethers.formatUnits(buyRateRaw, 6));
+                realStats.currentSellRate = realStats.currentBuyRate * (1 - SELL_TAX);
                 
                 realStats.totalHolders = await getTotalHoldersFromEvents();
                 
@@ -740,8 +811,18 @@
                     <div class="stat-card">
                         <div class="stat-icon"><i class="fas fa-chart-simple"></i></div>
                         <div class="stat-title">CURRENT RATE</div>
-                        <div class="stat-value">${realStats.currentRate.toFixed(6)} <span style="font-size: 12px;">USDT</span></div>
-                        <div class="stat-sub">SIG6 / USDT</div>
+                        <div class="stat-value">${realStats.currentBuyRate.toFixed(6)} <span style="font-size: 12px;">USDT</span></div>
+                        <div class="rate-info">
+                            <div class="rate-row">
+                                <span class="rate-label"><i class="fas fa-arrow-up"></i> Buy Rate:</span>
+                                <span class="rate-value">${realStats.currentBuyRate.toFixed(6)} USDT</span>
+                            </div>
+                            <div class="rate-row">
+                                <span class="rate-label"><i class="fas fa-arrow-down"></i> Sell Rate:</span>
+                                <span class="rate-value sell-rate-value">${realStats.currentSellRate.toFixed(6)} USDT</span>
+                            </div>
+                        </div>
+                        <div class="stat-sub">Tax: Buy ${BUY_TAX*100}% | Sell ${SELL_TAX*100}%</div>
                     </div>
                 </div>
 
