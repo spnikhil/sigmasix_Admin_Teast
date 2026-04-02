@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>SIGMA SIX | Add to Treasury</title>
+    <title>SIGMA SIX | Treasury Management</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -210,9 +210,13 @@
             color: #fff;
         }
 
+        .treasury-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
         .treasury-card {
-            max-width: 600px;
-            margin: 0 auto;
             background: var(--bg-card);
             backdrop-filter: blur(10px);
             border-radius: 32px;
@@ -230,18 +234,18 @@
 
         .card-header {
             background: linear-gradient(135deg, rgba(0,255,204,0.1), rgba(157,78,221,0.1));
-            padding: 32px;
+            padding: 24px 28px;
             text-align: center;
             border-bottom: 1px solid var(--border);
         }
 
         .card-header h2 {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 800;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            gap: 10px;
         }
 
         .card-header h2 i {
@@ -249,24 +253,24 @@
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            font-size: 32px;
+            font-size: 28px;
         }
 
         .card-header p {
-            font-size: 13px;
+            font-size: 12px;
             color: var(--text-muted);
-            margin-top: 12px;
+            margin-top: 8px;
         }
 
         .card-body {
-            padding: 32px;
+            padding: 28px;
         }
 
         .balance-info {
             background: var(--bg-elevated);
             border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 28px;
+            padding: 18px;
+            margin-bottom: 24px;
             text-align: center;
             border: 1px solid var(--border);
         }
@@ -280,19 +284,19 @@
         }
 
         .balance-value {
-            font-size: 36px;
+            font-size: 32px;
             font-weight: 800;
             color: var(--primary);
         }
 
         .balance-value small {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 400;
             color: var(--text-muted);
         }
 
         .input-group {
-            margin-bottom: 24px;
+            margin-bottom: 22px;
         }
 
         .input-group label {
@@ -333,31 +337,27 @@
         .input-wrapper input {
             background: transparent;
             border: none;
-            padding: 16px 12px;
+            padding: 14px 12px;
             color: var(--text);
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 600;
             width: 100%;
             outline: none;
-        }
-
-        .input-wrapper input::placeholder {
-            color: var(--text-muted);
-            font-weight: 400;
         }
 
         .amount-actions {
             display: flex;
             gap: 12px;
             margin-top: 8px;
+            flex-wrap: wrap;
         }
 
         .quick-amount {
             background: rgba(0,255,204,0.1);
             border: 1px solid var(--border);
-            padding: 6px 16px;
+            padding: 6px 14px;
             border-radius: 30px;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
             color: var(--primary);
             cursor: pointer;
@@ -374,7 +374,7 @@
             background: var(--bg-elevated);
             border-radius: 16px;
             padding: 16px;
-            margin: 20px 0;
+            margin: 18px 0;
             border: 1px solid var(--border);
             display: none;
         }
@@ -391,7 +391,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 8px 16px;
+            padding: 6px 14px;
             border-radius: 40px;
             background: rgba(255,255,255,0.05);
         }
@@ -407,15 +407,15 @@
         }
 
         .step-number {
-            width: 24px;
-            height: 24px;
+            width: 22px;
+            height: 22px;
             border-radius: 50%;
             background: var(--text-muted);
             color: #000;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 800;
         }
 
@@ -431,10 +431,10 @@
             width: 100%;
             background: var(--gradient);
             border: none;
-            padding: 18px;
+            padding: 16px;
             border-radius: 20px;
             font-weight: 800;
-            font-size: 18px;
+            font-size: 16px;
             color: #000;
             cursor: pointer;
             transition: all 0.3s;
@@ -456,11 +456,15 @@
             transform: none;
         }
 
+        .withdraw-btn {
+            background: linear-gradient(135deg, #ff4d4d, #cc0000);
+        }
+
         .status-msg {
-            margin-top: 20px;
-            padding: 14px;
+            margin-top: 18px;
+            padding: 12px;
             border-radius: 14px;
-            font-size: 13px;
+            font-size: 12px;
             text-align: center;
             display: none;
         }
@@ -487,11 +491,11 @@
         }
 
         .info-note {
-            margin-top: 24px;
-            padding: 14px;
+            margin-top: 20px;
+            padding: 12px;
             background: rgba(0,255,204,0.05);
             border-radius: 14px;
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-muted);
             display: flex;
             align-items: center;
@@ -500,7 +504,7 @@
 
         .info-note i {
             color: var(--primary);
-            font-size: 16px;
+            font-size: 14px;
         }
 
         .footer {
@@ -556,19 +560,19 @@
             to { transform: rotate(360deg); }
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 900px) {
+            .treasury-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
             .container {
                 padding: 20px 16px;
             }
             .card-header h2 {
-                font-size: 22px;
+                font-size: 20px;
             }
             .balance-value {
                 font-size: 28px;
-            }
-            .submit-btn {
-                padding: 14px;
-                font-size: 16px;
             }
         }
     </style>
@@ -582,7 +586,7 @@
         <div class="header">
             <div class="logo-area">
                 <h1><i class="fas fa-landmark"></i> SIGMA SIX | TREASURY</h1>
-                <p>Admin Tools • Add USDT to Treasury</p>
+                <p>Admin Tools • Add & Withdraw USDT</p>
             </div>
             <div style="display: flex; gap: 15px; flex-wrap: wrap;">
                 <button class="back-btn" onclick="window.location.href='index.html'"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
@@ -611,14 +615,18 @@
     </div>
 
     <script>
-        const SIGMA_ADDRESS = "0x846339d474AE98b219111eb969E27b6317aE5852";
+        // ============ UPDATED CONTRACT ADDRESS ============
+        const SIGMA_ADDRESS = "0xaF215838d156F7d348A6d56cA962cbC680A2153F";
         const USDT_ADDRESS = "0xc2132D05D31c914a87C6611C10748AEb04B58e8F";
         const CREATOR_ADDRESS = "0xDf572e4D93582a9b2EEA65BDb0C588FB5fD4EC4b".toLowerCase();
 
+        // ============ FULL ABI FROM PROVIDED CONTRACT ============
         const SIGMA_ABI = [
             "function addTreasury(uint256 _amt) external",
+            "function emergencyWithdrawTreasury(uint256 _amt) external",
             "function creator() view returns (address)",
-            "function usdt() view returns (address)"
+            "function usdt() view returns (address)",
+            "function balanceOf(address) view returns (uint256)"
         ];
 
         const USDT_ABI = [
@@ -633,8 +641,7 @@
         let isCreator = false;
         let currentUSDTBalance = 0;
         let currentTreasuryBalance = 0;
-        let isApproved = false;
-        let currentAmount = 0;
+        let isApprovedForAdd = false;
 
         function createParticles() {
             const container = document.getElementById('particles');
@@ -770,19 +777,19 @@
                 
                 const allowance = await usdtContract.allowance(userAddress, SIGMA_ADDRESS);
                 const allowanceNum = parseFloat(ethers.formatUnits(allowance, 6));
-                isApproved = allowanceNum > 0;
+                isApprovedForAdd = allowanceNum > 0;
                 
             } catch (error) {
                 console.error("Error loading data:", error);
             }
         }
 
+        // ========== ADD TREASURY FUNCTIONS ==========
         async function checkAllowance(amount) {
             try {
                 const allowance = await usdtContract.allowance(userAddress, SIGMA_ADDRESS);
                 const allowanceNum = parseFloat(ethers.formatUnits(allowance, 6));
-                isApproved = allowanceNum >= amount - 0.001;
-                return isApproved;
+                return allowanceNum >= amount - 0.001;
             } catch (error) {
                 console.error("Allowance check error:", error);
                 return false;
@@ -790,12 +797,11 @@
         }
 
         async function approveUSDT(amount) {
-            const statusDiv = document.getElementById('treasuryStatus');
-            const btn = document.querySelector('#treasuryCard .submit-btn');
+            const statusDiv = document.getElementById('addTreasuryStatus');
+            const btn = document.querySelector('#addCard .submit-btn');
             
             try {
                 const amountWei = ethers.parseUnits(amount.toString(), 6);
-                
                 showStatus(statusDiv, 'loading', 'Approving USDT...');
                 btn.disabled = true;
                 
@@ -803,16 +809,11 @@
                 showStatus(statusDiv, 'loading', 'Waiting for confirmation...');
                 await tx.wait();
                 
-                isApproved = true;
+                isApprovedForAdd = true;
                 showStatus(statusDiv, 'success', '✅ USDT Approved! You can now add to treasury.');
-                
-                setTimeout(() => {
-                    statusDiv.style.display = 'none';
-                }, 3000);
-                
+                setTimeout(() => statusDiv.style.display = 'none', 3000);
                 updateApprovalUI(true);
                 btn.disabled = false;
-                
             } catch (error) {
                 console.error("Approve error:", error);
                 showStatus(statusDiv, 'error', `❌ Approval failed: ${error.message.slice(0, 100)}`);
@@ -823,27 +824,27 @@
         async function addToTreasury() {
             const amountInput = document.getElementById('treasuryAmount');
             const amount = parseFloat(amountInput.value);
-            const statusDiv = document.getElementById('treasuryStatus');
-            const btn = document.querySelector('#treasuryCard .submit-btn');
+            const statusDiv = document.getElementById('addTreasuryStatus');
+            const btn = document.querySelector('#addCard .submit-btn');
             
             if (isNaN(amount) || amount <= 0) {
                 showStatus(statusDiv, 'error', 'Please enter a valid amount');
                 return;
             }
-            
             if (amount > currentUSDTBalance) {
                 showStatus(statusDiv, 'error', `Insufficient USDT balance. You have ${currentUSDTBalance.toFixed(2)} USDT`);
                 return;
             }
             
-            if (!isApproved) {
+            const isAllowed = await checkAllowance(amount);
+            if (!isAllowed) {
                 await approveUSDT(amount);
-                if (!isApproved) return;
+                const newAllowance = await checkAllowance(amount);
+                if (!newAllowance) return;
             }
             
             try {
                 const amountWei = ethers.parseUnits(amount.toString(), 6);
-                
                 showStatus(statusDiv, 'loading', 'Adding to treasury...');
                 btn.disabled = true;
                 
@@ -852,25 +853,56 @@
                 await tx.wait();
                 
                 showStatus(statusDiv, 'success', `✅ Successfully added ${amount.toFixed(2)} USDT to treasury!`);
-                
                 await loadData();
                 updateBalanceDisplay();
                 amountInput.value = '';
-                isApproved = false;
+                isApprovedForAdd = false;
                 updateApprovalUI(false);
-                
-                setTimeout(() => {
-                    statusDiv.style.display = 'none';
-                }, 5000);
-                
+                setTimeout(() => statusDiv.style.display = 'none', 5000);
                 btn.disabled = false;
-                
             } catch (error) {
-                console.error("Treasury error:", error);
-                let errorMsg = error.message;
-                if (errorMsg.includes("user rejected")) errorMsg = "Transaction rejected";
-                if (errorMsg.includes("insufficient")) errorMsg = "Insufficient POL for gas";
-                showStatus(statusDiv, 'error', `❌ Failed: ${errorMsg.slice(0, 100)}`);
+                console.error("Treasury add error:", error);
+                let errorMsg = error.message.includes("user rejected") ? "Transaction rejected" : error.message.slice(0, 100);
+                showStatus(statusDiv, 'error', `❌ Failed: ${errorMsg}`);
+                btn.disabled = false;
+            }
+        }
+
+        // ========== WITHDRAW TREASURY (emergencyWithdrawTreasury) ==========
+        async function withdrawFromTreasury() {
+            const amountInput = document.getElementById('withdrawAmount');
+            const amount = parseFloat(amountInput.value);
+            const statusDiv = document.getElementById('withdrawTreasuryStatus');
+            const btn = document.querySelector('#withdrawCard .submit-btn');
+            
+            if (isNaN(amount) || amount <= 0) {
+                showStatus(statusDiv, 'error', 'Please enter a valid withdrawal amount');
+                return;
+            }
+            if (amount > currentTreasuryBalance) {
+                showStatus(statusDiv, 'error', `Insufficient treasury balance. Available: ${currentTreasuryBalance.toFixed(2)} USDT`);
+                return;
+            }
+            
+            try {
+                const amountWei = ethers.parseUnits(amount.toString(), 6);
+                showStatus(statusDiv, 'loading', 'Withdrawing from treasury...');
+                btn.disabled = true;
+                
+                const tx = await sigmaContract.emergencyWithdrawTreasury(amountWei);
+                showStatus(statusDiv, 'loading', 'Waiting for confirmation...');
+                await tx.wait();
+                
+                showStatus(statusDiv, 'success', `✅ Successfully withdrew ${amount.toFixed(2)} USDT from treasury to creator wallet!`);
+                await loadData();
+                updateBalanceDisplay();
+                amountInput.value = '';
+                setTimeout(() => statusDiv.style.display = 'none', 5000);
+                btn.disabled = false;
+            } catch (error) {
+                console.error("Withdraw error:", error);
+                let errorMsg = error.message.includes("user rejected") ? "Transaction rejected" : error.message.slice(0, 100);
+                showStatus(statusDiv, 'error', `❌ Withdrawal failed: ${errorMsg}`);
                 btn.disabled = false;
             }
         }
@@ -879,36 +911,42 @@
             const approvalSection = document.getElementById('approvalSection');
             const step1 = document.getElementById('step1');
             const step2 = document.getElementById('step2');
-            
-            if (approved) {
-                step1.classList.add('completed');
-                step1.classList.remove('active');
-                step2.classList.add('active');
-                step2.classList.remove('completed');
-            } else {
-                step1.classList.remove('completed');
-                step1.classList.add('active');
-                step2.classList.remove('active', 'completed');
+            if (approvalSection) {
+                approvalSection.style.display = approved ? 'none' : 'block';
+            }
+            if (step1 && step2) {
+                if (approved) {
+                    step1.classList.add('completed');
+                    step1.classList.remove('active');
+                    step2.classList.add('active');
+                    step2.classList.remove('completed');
+                } else {
+                    step1.classList.remove('completed');
+                    step1.classList.add('active');
+                    step2.classList.remove('active', 'completed');
+                }
             }
         }
 
         function updateBalanceDisplay() {
-            const userBalanceSpan = document.getElementById('userBalance');
-            const treasuryBalanceSpan = document.getElementById('treasuryBalance');
-            
-            if (userBalanceSpan) {
-                userBalanceSpan.textContent = currentUSDTBalance.toFixed(2);
-            }
-            if (treasuryBalanceSpan) {
-                treasuryBalanceSpan.textContent = currentTreasuryBalance.toFixed(2);
-            }
+            const userSpan = document.getElementById('userBalance');
+            const treasurySpan = document.getElementById('treasuryBalance');
+            if (userSpan) userSpan.textContent = currentUSDTBalance.toFixed(2);
+            if (treasurySpan) treasurySpan.textContent = currentTreasuryBalance.toFixed(2);
         }
 
         function setQuickAmount(amount) {
-            document.getElementById('treasuryAmount').value = amount;
+            const input = document.getElementById('treasuryAmount');
+            if (input) input.value = amount;
+        }
+
+        function setQuickWithdrawAmount(amount) {
+            const input = document.getElementById('withdrawAmount');
+            if (input) input.value = amount;
         }
 
         function showStatus(element, type, message) {
+            if (!element) return;
             element.textContent = message;
             element.className = `status-msg ${type}`;
             element.style.display = 'block';
@@ -917,64 +955,112 @@
         function renderTreasuryPanel() {
             const content = document.getElementById('pageContent');
             content.innerHTML = `
-                <div class="treasury-card" id="treasuryCard">
-                    <div class="card-header">
-                        <h2><i class="fas fa-coins"></i> Add to Treasury</h2>
-                        <p>Deposit USDT directly to contract treasury</p>
+                <div class="treasury-grid">
+                    <!-- ADD TREASURY CARD -->
+                    <div class="treasury-card" id="addCard">
+                        <div class="card-header">
+                            <h2><i class="fas fa-coins"></i> Add to Treasury</h2>
+                            <p>Deposit USDT directly to contract treasury</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="balance-info">
+                                <div class="balance-label"><i class="fas fa-wallet"></i> Your USDT Balance</div>
+                                <div class="balance-value" id="userBalance">${currentUSDTBalance.toFixed(2)} <small>USDT</small></div>
+                            </div>
+                            <div class="balance-info" style="margin-top: 12px;">
+                                <div class="balance-label"><i class="fas fa-landmark"></i> Current Treasury Balance</div>
+                                <div class="balance-value" id="treasuryBalance">${currentTreasuryBalance.toFixed(2)} <small>USDT</small></div>
+                            </div>
+                            
+                            <div class="input-group">
+                                <label><i class="fas fa-dollar-sign"></i> Amount to Add (USDT)</label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-coins"></i>
+                                    <input type="number" id="treasuryAmount" placeholder="0.00" step="any">
+                                </div>
+                                <div class="amount-actions">
+                                    <span class="quick-amount" onclick="setQuickAmount(100)">100 USDT</span>
+                                    <span class="quick-amount" onclick="setQuickAmount(500)">500 USDT</span>
+                                    <span class="quick-amount" onclick="setQuickAmount(1000)">1000 USDT</span>
+                                    <span class="quick-amount" onclick="setQuickAmount(5000)">5000 USDT</span>
+                                </div>
+                            </div>
+                            
+                            <div class="approval-section" id="approvalSection">
+                                <div class="approval-steps">
+                                    <div class="step-badge active" id="step1">
+                                        <div class="step-number">1</div>
+                                        <span>Approve USDT</span>
+                                    </div>
+                                    <i class="fas fa-arrow-right" style="color: var(--text-muted);"></i>
+                                    <div class="step-badge" id="step2">
+                                        <div class="step-number">2</div>
+                                        <span>Add to Treasury</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button class="submit-btn" onclick="addToTreasury()">
+                                <i class="fas fa-plus-circle"></i> Add to Treasury
+                            </button>
+                            <div id="addTreasuryStatus" class="status-msg"></div>
+                            <div class="info-note">
+                                <i class="fas fa-info-circle"></i>
+                                <span>Transfers USDT from your wallet to contract treasury. Only Creator can perform this.</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <div class="balance-info">
-                            <div class="balance-label"><i class="fas fa-wallet"></i> Your USDT Balance</div>
-                            <div class="balance-value" id="userBalance">${currentUSDTBalance.toFixed(2)} <small>USDT</small></div>
+
+                    <!-- WITHDRAW TREASURY CARD -->
+                    <div class="treasury-card" id="withdrawCard">
+                        <div class="card-header">
+                            <h2><i class="fas fa-hand-holding-usd"></i> Withdraw from Treasury</h2>
+                            <p>Emergency withdrawal of USDT funds</p>
                         </div>
-                        <div class="balance-info" style="margin-top: 12px;">
-                            <div class="balance-label"><i class="fas fa-landmark"></i> Current Treasury Balance</div>
-                            <div class="balance-value" id="treasuryBalance">${currentTreasuryBalance.toFixed(2)} <small>USDT</small></div>
-                        </div>
-                        
-                        <div class="input-group">
-                            <label><i class="fas fa-dollar-sign"></i> Amount to Add (USDT)</label>
-                            <div class="input-wrapper">
-                                <i class="fas fa-coins"></i>
-                                <input type="number" id="treasuryAmount" placeholder="0.00" step="any">
+                        <div class="card-body">
+                            <div class="balance-info">
+                                <div class="balance-label"><i class="fas fa-piggy-bank"></i> Available Treasury Balance</div>
+                                <div class="balance-value" id="withdrawTreasuryBalance">${currentTreasuryBalance.toFixed(2)} <small>USDT</small></div>
                             </div>
-                            <div class="amount-actions">
-                                <span class="quick-amount" onclick="setQuickAmount(100)">100 USDT</span>
-                                <span class="quick-amount" onclick="setQuickAmount(500)">500 USDT</span>
-                                <span class="quick-amount" onclick="setQuickAmount(1000)">1000 USDT</span>
-                                <span class="quick-amount" onclick="setQuickAmount(5000)">5000 USDT</span>
-                            </div>
-                        </div>
-                        
-                        <div class="approval-section" id="approvalSection">
-                            <div class="approval-steps">
-                                <div class="step-badge ${isApproved ? 'completed' : 'active'}" id="step1">
-                                    <div class="step-number">1</div>
-                                    <span>Approve USDT</span>
+                            
+                            <div class="input-group">
+                                <label><i class="fas fa-dollar-sign"></i> Amount to Withdraw (USDT)</label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                    <input type="number" id="withdrawAmount" placeholder="0.00" step="any">
                                 </div>
-                                <i class="fas fa-arrow-right" style="color: var(--text-muted);"></i>
-                                <div class="step-badge ${isApproved ? 'active' : ''}" id="step2">
-                                    <div class="step-number">2</div>
-                                    <span>Add to Treasury</span>
+                                <div class="amount-actions">
+                                    <span class="quick-amount" onclick="setQuickWithdrawAmount(100)">100 USDT</span>
+                                    <span class="quick-amount" onclick="setQuickWithdrawAmount(500)">500 USDT</span>
+                                    <span class="quick-amount" onclick="setQuickWithdrawAmount(1000)">1000 USDT</span>
+                                    <span class="quick-amount" onclick="setQuickWithdrawAmount(5000)">5000 USDT</span>
+                                    <span class="quick-amount" onclick="setQuickWithdrawAmount(${currentTreasuryBalance.toFixed(0)})">MAX</span>
                                 </div>
                             </div>
-                        </div>
-                        
-                        <button class="submit-btn" onclick="addToTreasury()">
-                            <i class="fas fa-plus-circle"></i> Add to Treasury
-                        </button>
-                        <div id="treasuryStatus" class="status-msg"></div>
-                        
-                        <div class="info-note">
-                            <i class="fas fa-info-circle"></i>
-                            <span>This will transfer USDT from your wallet directly to the contract treasury. No SIGMA tokens will be minted. Only Creator can perform this action.</span>
+                            
+                            <button class="submit-btn withdraw-btn" onclick="withdrawFromTreasury()">
+                                <i class="fas fa-unlock-alt"></i> Emergency Withdraw
+                            </button>
+                            <div id="withdrawTreasuryStatus" class="status-msg"></div>
+                            <div class="info-note">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span>⚠️ Emergency function: Withdraws USDT directly to creator wallet. Only accessible by contract creator.</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             `;
             
-            if (!isApproved) {
-                document.getElementById('approvalSection').style.display = 'block';
+            // Re-attach balance for withdraw card
+            const withdrawTreasurySpan = document.getElementById('withdrawTreasuryBalance');
+            if (withdrawTreasurySpan) withdrawTreasurySpan.textContent = currentTreasuryBalance.toFixed(2);
+            
+            // Update approval section visibility based on isApprovedForAdd
+            if (!isApprovedForAdd) {
+                const approvalDiv = document.getElementById('approvalSection');
+                if (approvalDiv) approvalDiv.style.display = 'block';
+            } else {
+                updateApprovalUI(true);
             }
         }
 
