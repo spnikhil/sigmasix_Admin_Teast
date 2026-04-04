@@ -286,6 +286,38 @@
             flex-wrap: wrap;
         }
 
+        /* Report Buttons Section - New Styles */
+        .reports-section {
+            margin-bottom: 40px;
+        }
+
+        .reports-grid {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .report-btn {
+            background: linear-gradient(135deg, var(--secondary), var(--primary-dark));
+            border: none;
+            padding: 12px 28px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 14px;
+            color: #000;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 2px 8px rgba(0,255,204,0.2);
+        }
+
+        .report-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,255,204,0.4);
+        }
+
         .action-btn-sm {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             border: none;
@@ -407,6 +439,7 @@
             .admin-header { flex-direction: column; text-align: center; }
             .stat-value { font-size: 22px; }
             .daily-value { font-size: 20px; }
+            .report-btn, .action-btn-sm { padding: 8px 20px; font-size: 12px; }
         }
 
         @keyframes fadeInUp {
@@ -823,6 +856,25 @@
                             </div>
                         </div>
                         <div class="stat-sub">Tax: Buy ${BUY_TAX*100}% | Sell ${SELL_TAX*100}%</div>
+                    </div>
+                </div>
+
+                <!-- NEW REPORTS SECTION -->
+                <div class="reports-section">
+                    <div class="section-title">
+                        <i class="fas fa-file-alt"></i>
+                        <span>REPORTS</span>
+                    </div>
+                    <div class="reports-grid">
+                        <button class="report-btn" onclick="window.location.href='members.html'">
+                            <i class="fas fa-users"></i> Member Report
+                        </button>
+                        <button class="report-btn" onclick="window.location.href='income.html'">
+                            <i class="fas fa-chart-line"></i> Income Report
+                        </button>
+                        <button class="report-btn" onclick="window.location.href='buy_sell.html'">
+                            <i class="fas fa-exchange-alt"></i> Buy/Sell Report
+                        </button>
                     </div>
                 </div>
 
