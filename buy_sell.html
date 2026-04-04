@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>SIGMA SIX | Buy/Sell Report</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00ffcc;
+            --primary-dark: #00ccaa;
+            --secondary: #9d4edd;
+            --secondary-dark: #7b2cbf;
+            --bg-dark: #0a0b10;
+            --bg-card: #0f1119;
+            --bg-elevated: #151823;
+            --text: #ffffff;
+            --text-muted: #8b8d9b;
+            --border: rgba(0, 255, 204, 0.2);
+            --success: #00ff88;
+            --warning: #ffaa00;
+            --danger: #ff4d4d;
+            --info: #3b82f6;
+            --gradient: linear-gradient(135deg, #00ffcc, #9d4edd, #ff2a6d);
+        }
+
+        body {
+            background: var(--bg-dark);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .rainbow-border {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient);
+            background-size: 400% 400%;
+            animation: rainbow 8s ease infinite;
+            z-index: 1000;
+        }
+
+        @keyframes rainbow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .bg-glow {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 1200px;
+            height: 1200px;
+            background: radial-gradient(circle, rgba(157,78,221,0.15) 0%, rgba(0,255,204,0.1) 25%, transparent 70%);
+            z-index: -2;
+        }
+
+        .particles-container {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+
+        .container {
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .nav-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 12px;
+            background: rgba(0,255,204,0.1);
+            border: 1px solid rgba(0,255,204,0.3);
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(0,255,204,0.2);
+            transform: translateX(-5px);
+        }
+
+        .nav-btn {
+            padding: 10px 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: rgba(255,255,255,0.03);
+            color: #888;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn:hover {
+            background: rgba(0,255,204,0.1);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-top: 20px;
+        }
+
+        .header h1 {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(22,24,33,0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(0,255,204,0.1);
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--primary);
+        }
+
+        .stat-card i {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .buy-icon { color: var(--success); }
+        .stat-card .sell-icon { color: var(--danger); }
+        .stat-card .treasury-icon { color: var(--primary); }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 5px;
+        }
+
+        .stat-sub {
+            font-size: 10px;
+            color: #666;
+            margin-top: 8px;
+        }
+
+        /* Tab Navigation */
+        .tab-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 12px 28px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            border-radius: 40px;
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, rgba(0,255,204,0.15), rgba(157,78,221,0.15));
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .tab-btn:hover:not(.active) {
+            background: rgba(255,255,255,0.08);
+            color: var(--text);
+        }
+
+        /* Tables */
+        .table-responsive {
+            overflow-x: auto;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
+
+        thead {
+            background: linear-gradient(90deg, rgba(0,255,204,0.1), rgba(157,78,221,0.1));
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        th {
+            padding: 15px 12px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 12px;
+            color: var(--primary);
+            text-transform: uppercase;
+            border-bottom: 2px solid rgba(0,255,204,0.2);
+        }
+
+        td {
+            padding: 12px 12px;
+            border-bottom: 1px solid rgba(45,47,62,0.3);
+            font-size: 13px;
+        }
+
+        tr:hover td {
+            background: rgba(255,255,255,0.03);
+        }
+
+        .loading, .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--primary);
+        }
+
+        .loading i, .empty-state i {
+            font-size: 48px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .wallet-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-family: monospace;
+            font-size: 12px;
+        }
+
+        .wallet-link:hover {
+            text-decoration: underline;
+        }
+
+        .badge-buy {
+            background: rgba(0,255,136,0.15);
+            color: var(--success);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge-sell {
+            background: rgba(255,77,77,0.15);
+            color: var(--danger);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .results-count {
+            background: rgba(0,255,204,0.1);
+            color: var(--primary);
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: inline-block;
+            border: 1px solid rgba(0,255,204,0.3);
+        }
+
+        .progress-bar {
+            width: 100%;
+            max-width: 400px;
+            height: 6px;
+            background: var(--border);
+            border-radius: 3px;
+            margin: 15px auto;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            font-size: 11px;
+            color: #888;
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 15px; }
+            .header h1 { font-size: 28px; }
+            .stat-value { font-size: 22px; }
+            .tab-btn { padding: 8px 16px; font-size: 12px; }
+            th, td { padding: 8px 6px; font-size: 11px; }
+            .wallet-link { font-size: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="rainbow-border"></div>
+    <div class="particles-container" id="particles"></div>
+    <div class="bg-glow"></div>
+
+    <div class="container">
+        <div class="nav-container">
+            <a href="javascript:history.back()" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Back to Admin
+            </a>
+            <button class="nav-btn" onclick="location.reload()">
+                <i class="fas fa-sync-alt"></i> Refresh Data
+            </button>
+            <button class="nav-btn" onclick="exportData()">
+                <i class="fas fa-download"></i> Export CSV
+            </button>
+        </div>
+
+        <div class="header">
+            <h1><i class="fas fa-exchange-alt"></i> BUY / SELL REPORT</h1>
+            <p>Complete transaction history • Real-time data from blockchain</p>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <i class="fas fa-arrow-up buy-icon"></i>
+                <div class="stat-value" id="todayBuy">--</div>
+                <div class="stat-label">Today's Buy Volume</div>
+                <div class="stat-sub">USDT Spent</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-arrow-down sell-icon"></i>
+                <div class="stat-value" id="todaySell">--</div>
+                <div class="stat-label">Today's Sell Volume</div>
+                <div class="stat-sub">USDT Received</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-landmark treasury-icon"></i>
+                <div class="stat-value" id="treasuryBalance">--</div>
+                <div class="stat-label">Treasury Balance</div>
+                <div class="stat-sub">Contract USDT Balance</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-chart-line"></i>
+                <div class="stat-value" id="totalTx">--</div>
+                <div class="stat-label">Total Transactions</div>
+                <div class="stat-sub">Buys + Sells</div>
+            </div>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="tab-container">
+            <button class="tab-btn active" onclick="switchTab('buy')">
+                <i class="fas fa-arrow-up"></i> Buy Transactions
+                <span id="buyCount" style="background: rgba(0,255,136,0.2); padding: 2px 8px; border-radius: 20px; font-size: 11px;">0</span>
+            </button>
+            <button class="tab-btn" onclick="switchTab('sell')">
+                <i class="fas fa-arrow-down"></i> Sell Transactions
+                <span id="sellCount" style="background: rgba(255,77,77,0.2); padding: 2px 8px; border-radius: 20px; font-size: 11px;">0</span>
+            </button>
+        </div>
+
+        <!-- Buy Transactions Table -->
+        <div id="buyTab" class="tab-content">
+            <div class="results-count" id="buyResults">
+                <i class="fas fa-chart-line"></i> <span id="buyResultsText">Loading buy transactions...</span>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Wallet Address</th>
+                            <th>USDT Spent</th>
+                            <th>SIG6 Received</th>
+                            <th>Rate (USDT)</th>
+                            <th>Transaction Type</th>
+                            <th>Date & Time</th>
+                        </thead>
+                        <tbody id="buyTableBody">
+                            <tr><td colspan="7" class="loading"><i class="fas fa-spinner fa-spin"></i><br>Loading buy transactions...<div class="progress-bar"><div class="progress-fill" id="buyProgress"></div></div></td></tr>
+                        </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Sell Transactions Table -->
+        <div id="sellTab" class="tab-content" style="display: none;">
+            <div class="results-count" id="sellResults">
+                <i class="fas fa-chart-line"></i> <span id="sellResultsText">Loading sell transactions...</span>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Wallet Address</th>
+                            <th>SIG6 Sold</th>
+                            <th>USDT Received</th>
+                            <th>Rate (USDT)</th>
+                            <th>Transaction Type</th>
+                            <th>Date & Time</th>
+                        </thead>
+                        <tbody id="sellTableBody">
+                            <tr><td colspan="7" class="loading"><i class="fas fa-spinner fa-spin"></i><br>Loading sell transactions...<div class="progress-bar"><div class="progress-fill" id="sellProgress"></div></div></td></tr>
+                        </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><i class="fas fa-chart-line"></i> Real-time data from Polygon Blockchain • All transactions are recorded permanently</p>
+        </div>
+    </div>
+
+    <script>
+        const SIGMA_ADDRESS = "0xaF215838d156F7d348A6d56cA962cbC680A2153F";
+        const USDT_ADDRESS = "0xc2132D05D31c914a87C6611C10748AEb04B58e8F";
+
+        const SIGMA_ABI = [
+            "event Buy(address indexed user, uint256 amount, uint256 rate, uint256 usdtSpent)",
+            "event Sell(address indexed user, uint256 amount, uint256 rate, uint256 usdtReceived)",
+            "function usdt() view returns (address)"
+        ];
+
+        const USDT_ABI = [
+            "function balanceOf(address) view returns (uint256)"
+        ];
+
+        let provider;
+        let sigmaContract;
+        let usdtContract;
+
+        let buyTransactions = [];
+        let sellTransactions = [];
+
+        let currentTab = 'buy';
+
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 40; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = 12 + Math.random() * 20 + 's';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        function switchTab(tab) {
+            currentTab = tab;
+            
+            // Update button styles
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            if (tab === 'buy') {
+                document.querySelector('.tab-btn:first-child').classList.add('active');
+                document.getElementById('buyTab').style.display = 'block';
+                document.getElementById('sellTab').style.display = 'none';
+            } else {
+                document.querySelector('.tab-btn:last-child').classList.add('active');
+                document.getElementById('buyTab').style.display = 'none';
+                document.getElementById('sellTab').style.display = 'block';
+            }
+        }
+
+        function formatAddress(address) {
+            if (!address) return 'N/A';
+            return address.slice(0, 8) + '...' + address.slice(-6);
+        }
+
+        function formatDateTime(timestamp) {
+            if (!timestamp) return 'N/A';
+            const date = new Date(timestamp * 1000);
+            return date.toLocaleString('en-GB', { 
+                day: '2-digit', 
+                month: 'short', 
+                year: 'numeric', 
+                hour: '2-digit', 
+                minute: '2-digit',
+                second: '2-digit'
+            });
+        }
+
+        function formatNumber(num, decimals = 2) {
+            return num.toLocaleString(undefined, { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+        }
+
+        async function loadData() {
+            if (!window.ethereum) {
+                showError("Please install MetaMask");
+                return;
+            }
+
+            try {
+                provider = new ethers.BrowserProvider(window.ethereum);
+                sigmaContract = new ethers.Contract(SIGMA_ADDRESS, SIGMA_ABI, provider);
+                
+                // Get USDT contract for treasury balance
+                const usdtAddress = await sigmaContract.usdt();
+                usdtContract = new ethers.Contract(usdtAddress, USDT_ABI, provider);
+
+                // Show loading
+                document.getElementById('buyTableBody').innerHTML = '<tr><td colspan="7" class="loading"><i class="fas fa-spinner fa-spin"></i><br>Fetching buy transactions...<div class="progress-bar"><div class="progress-fill" id="buyProgress"></div></div></td></tr>';
+                document.getElementById('sellTableBody').innerHTML = '<tr><td colspan="7" class="loading"><i class="fas fa-spinner fa-spin"></i><br>Fetching sell transactions...<div class="progress-bar"><div class="progress-fill" id="sellProgress"></div></div></td></tr>';
+
+                // Fetch treasury balance
+                const treasuryRaw = await usdtContract.balanceOf(SIGMA_ADDRESS);
+                const treasuryBalance = parseFloat(ethers.formatUnits(treasuryRaw, 6));
+                document.getElementById('treasuryBalance').textContent = formatNumber(treasuryBalance, 2) + ' USDT';
+
+                // Fetch Buy Events
+                const buyFilter = sigmaContract.filters.Buy();
+                const buyEvents = await sigmaContract.queryFilter(buyFilter, 0, 'latest');
+                console.log(`Found ${buyEvents.length} Buy events`);
+
+                // Fetch Sell Events
+                const sellFilter = sigmaContract.filters.Sell();
+                const sellEvents = await sigmaContract.queryFilter(sellFilter, 0, 'latest');
+                console.log(`Found ${sellEvents.length} Sell events`);
+
+                // Process Buy Events
+                buyTransactions = [];
+                let totalBuyToday = 0;
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const todayTimestamp = today.getTime() / 1000;
+
+                for (let i = 0; i < buyEvents.length; i++) {
+                    const event = buyEvents[i];
+                    const block = await provider.getBlock(event.blockNumber);
+                    const usdtSpent = parseFloat(ethers.formatUnits(event.args.usdtSpent, 6));
+                    const sigmaAmount = parseFloat(ethers.formatEther(event.args.amount));
+                    const rate = parseFloat(ethers.formatUnits(event.args.rate, 6));
+                    
+                    // Check if today
+                    if (block.timestamp >= todayTimestamp) {
+                        totalBuyToday += usdtSpent;
+                    }
+                    
+                    buyTransactions.push({
+                        user: event.args.user,
+                        usdtSpent: usdtSpent,
+                        sigmaAmount: sigmaAmount,
+                        rate: rate,
+                        timestamp: block.timestamp,
+                        blockNumber: event.blockNumber
+                    });
+                    
+                    // Update progress
+                    if (i % 50 === 0) {
+                        const progress = (i / buyEvents.length) * 100;
+                        const buyProgress = document.getElementById('buyProgress');
+                        if (buyProgress) buyProgress.style.width = progress + '%';
+                    }
+                }
+
+                // Process Sell Events
+                sellTransactions = [];
+                let totalSellToday = 0;
+
+                for (let i = 0; i < sellEvents.length; i++) {
+                    const event = sellEvents[i];
+                    const block = await provider.getBlock(event.blockNumber);
+                    const sigmaAmount = parseFloat(ethers.formatEther(event.args.amount));
+                    const usdtReceived = parseFloat(ethers.formatUnits(event.args.usdtReceived, 6));
+                    const rate = parseFloat(ethers.formatUnits(event.args.rate, 6));
+                    
+                    // Check if today
+                    if (block.timestamp >= todayTimestamp) {
+                        totalSellToday += usdtReceived;
+                    }
+                    
+                    sellTransactions.push({
+                        user: event.args.user,
+                        sigmaAmount: sigmaAmount,
+                        usdtReceived: usdtReceived,
+                        rate: rate,
+                        timestamp: block.timestamp,
+                        blockNumber: event.blockNumber
+                    });
+                    
+                    // Update progress
+                    if (i % 50 === 0) {
+                        const progress = (i / sellEvents.length) * 100;
+                        const sellProgress = document.getElementById('sellProgress');
+                        if (sellProgress) sellProgress.style.width = progress + '%';
+                    }
+                }
+
+                // Sort by timestamp (newest first)
+                buyTransactions.sort((a, b) => b.timestamp - a.timestamp);
+                sellTransactions.sort((a, b) => b.timestamp - a.timestamp);
+
+                // Update stats
+                document.getElementById('todayBuy').textContent = formatNumber(totalBuyToday, 2) + ' USDT';
+                document.getElementById('todaySell').textContent = formatNumber(totalSellToday, 2) + ' USDT';
+                document.getElementById('totalTx').textContent = (buyTransactions.length + sellTransactions.length).toLocaleString();
+                document.getElementById('buyCount').textContent = buyTransactions.length;
+                document.getElementById('sellCount').textContent = sellTransactions.length;
+
+                // Display tables
+                displayBuyTable();
+                displaySellTable();
+
+                // Update progress to 100%
+                const buyProgress = document.getElementById('buyProgress');
+                const sellProgress = document.getElementById('sellProgress');
+                if (buyProgress) buyProgress.style.width = '100%';
+                if (sellProgress) sellProgress.style.width = '100%';
+
+            } catch (error) {
+                console.error("Error loading data:", error);
+                showError(error.message);
+            }
+        }
+
+        function displayBuyTable() {
+            const tbody = document.getElementById('buyTableBody');
+            const resultsSpan = document.getElementById('buyResultsText');
+            
+            if (buyTransactions.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="empty-state"><i class="fas fa-chart-line"></i><br>No buy transactions found</td></tr>';
+                resultsSpan.textContent = '0 buy transactions found';
+                return;
+            }
+
+            resultsSpan.textContent = `${buyTransactions.length} buy transactions found`;
+            
+            let html = '';
+            buyTransactions.forEach((tx, i) => {
+                html += `
+                    <tr>
+                        <td>${i + 1}</td>
+                        <td>
+                            <a href="https://polygonscan.com/address/${tx.user}" target="_blank" class="wallet-link">
+                                <i class="fas fa-external-link-alt"></i> ${tx.user}
+                            </a>
+                        </td>
+                        <td style="color: var(--warning); font-weight: 600;">${formatNumber(tx.usdtSpent, 4)} USDT</td>
+                        <td style="color: var(--success); font-weight: 600;">${formatNumber(tx.sigmaAmount, 4)} SIG6</td>
+                        <td>${formatNumber(tx.rate, 6)} USDT</td>
+                        <td><span class="badge-buy"><i class="fas fa-arrow-up"></i> BUY</span></td>
+                        <td>${formatDateTime(tx.timestamp)}</td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        function displaySellTable() {
+            const tbody = document.getElementById('sellTableBody');
+            const resultsSpan = document.getElementById('sellResultsText');
+            
+            if (sellTransactions.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="empty-state"><i class="fas fa-chart-line"></i><br>No sell transactions found</td></tr>';
+                resultsSpan.textContent = '0 sell transactions found';
+                return;
+            }
+
+            resultsSpan.textContent = `${sellTransactions.length} sell transactions found`;
+            
+            let html = '';
+            sellTransactions.forEach((tx, i) => {
+                html += `
+                    <tr>
+                        <td>${i + 1}</td>
+                        <td>
+                            <a href="https://polygonscan.com/address/${tx.user}" target="_blank" class="wallet-link">
+                                <i class="fas fa-external-link-alt"></i> ${tx.user}
+                            </a>
+                        </td>
+                        <td style="color: var(--danger); font-weight: 600;">${formatNumber(tx.sigmaAmount, 4)} SIG6</td>
+                        <td style="color: var(--success); font-weight: 600;">${formatNumber(tx.usdtReceived, 4)} USDT</td>
+                        <td>${formatNumber(tx.rate, 6)} USDT</td>
+                        <td><span class="badge-sell"><i class="fas fa-arrow-down"></i> SELL</span></td>
+                        <td>${formatDateTime(tx.timestamp)}</td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        function exportData() {
+            let data = [];
+            let filename = '';
+            let headers = [];
+
+            if (currentTab === 'buy') {
+                data = buyTransactions;
+                filename = 'buy_transactions.csv';
+                headers = ['Serial No', 'Wallet Address', 'USDT Spent', 'SIG6 Received', 'Rate (USDT)', 'Transaction Type', 'Date & Time'];
+            } else {
+                data = sellTransactions;
+                filename = 'sell_transactions.csv';
+                headers = ['Serial No', 'Wallet Address', 'SIG6 Sold', 'USDT Received', 'Rate (USDT)', 'Transaction Type', 'Date & Time'];
+            }
+
+            if (data.length === 0) {
+                alert("No data to export");
+                return;
+            }
+
+            let csvContent = headers.join(',') + '\n';
+            
+            data.forEach((tx, i) => {
+                let row;
+                if (currentTab === 'buy') {
+                    row = [
+                        i + 1,
+                        tx.user,
+                        tx.usdtSpent.toFixed(6),
+                        tx.sigmaAmount.toFixed(6),
+                        tx.rate.toFixed(6),
+                        'BUY',
+                        formatDateTime(tx.timestamp)
+                    ];
+                } else {
+                    row = [
+                        i + 1,
+                        tx.user,
+                        tx.sigmaAmount.toFixed(6),
+                        tx.usdtReceived.toFixed(6),
+                        tx.rate.toFixed(6),
+                        'SELL',
+                        formatDateTime(tx.timestamp)
+                    ];
+                }
+                csvContent += row.map(cell => `"${cell}"`).join(',') + '\n';
+            });
+
+            const link = document.createElement('a');
+            link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvContent));
+            link.setAttribute('download', filename);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function showError(message) {
+            const errorHtml = `<tr><td colspan="7" class="empty-state"><i class="fas fa-exclamation-triangle"></i><br>Error: ${message}</td></tr>`;
+            document.getElementById('buyTableBody').innerHTML = errorHtml;
+            document.getElementById('sellTableBody').innerHTML = errorHtml;
+        }
+
+        createParticles();
+        
+        window.onload = async () => {
+            if (window.ethereum) {
+                await loadData();
+            } else {
+                showError("Please install MetaMask to view transaction data");
+            }
+        };
+    </script>
+</body>
+</html>
